@@ -320,23 +320,33 @@ with tab3:
     if adae_toggle:
         st.header("Adverse Events Overview for All Treatments")
 
-        col1, col2 = st.columns(2)
 
-        with col1:
-            st.subheader('AE by Subjects')
-            fig1 = px.scatter(df1, x='ADURN', y='AEBODSYS', color='TRTA',
+        st.subheader('AE by Subjects')
+        fig1 = px.scatter(df1, x='ADURN', y='AEBODSYS', color='TRTA',
                               labels={'ADURN':'Duration','AEBODSYS':'Body System','TRTA':'Treatment'},
-                              height=600, width=800)
-            fig1.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
-            st.plotly_chart(fig1, use_container_width=True)
+                              height=400, width=800)
+        fig1.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
+        st.plotly_chart(fig1, use_container_width=True)
 
-        with col2:
-            st.subheader('Occurrences by Treatment')
-            fig2 = px.scatter(df2, x='Occurrences', y='AEBODSYS', color='TRTA',
+        st.subheader('Occurrences by Treatment')
+        fig2 = px.scatter(df2, x='Occurrences', y='AEBODSYS', color='TRTA',
                               labels={'Occurrences': 'Occurrences', 'AEBODSYS': 'Body System', 'TRTA': 'Treatment'},
-                              height=600, width=800)
-            fig2.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
-            st.plotly_chart(fig2, use_container_width=True)
+                              height=400, width=800)
+        fig2.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
+        st.plotly_chart(fig2, use_container_width=True)
+        
+        st.subheader('Adverse Events by Body System')
+        fig5 = px.scatter(
+                df5,
+                x='USUBJID',  
+                y='AEBODSYS', 
+                color='TRTA',
+                symbol='AEOUT',  
+                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases', 'TRTA': 'Treatment','USUBJID':'Subject Count','AEOUT':'Outcome'}, 
+                height=600,
+                width=800)
+        fig5.update_layout(margin=dict(l=0, r=0, b=0, t=40),font=dict(size=12),legend=dict(orientation="h",yanchor="top",y=-0.2,x=0.01))
+        st.plotly_chart(fig5,use_container_width=True)
 
         col3, col4 = st.columns(2)
 
@@ -344,7 +354,7 @@ with tab3:
             st.subheader('Total Adverse Event Duration by Hospitalization')
             fig3 = px.bar(df3, x='AESHOSP', y='Total_Adverse_Event_Duration', color='TRTA',
                           labels={'AESHOSP': 'Hospitalizaion', 'Total_Adverse_Event_Duration': 'Duration', 'TRTA': 'Treatment'},
-                          height=600, width=800)
+                          height=400, width=700)
             fig3.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
             st.plotly_chart(fig3, use_container_width=True)
 
@@ -356,57 +366,50 @@ with tab3:
                 values='ADURN',  # Size of each slice represents duration
                 labels={'TRTA': 'Treatment', 'AESEV': 'Severity', 'ADURN': 'Duration'},
                 color='TRTA',  # Color by treatment
-                height=500,
+                height=400,
                 width=800)
             st.plotly_chart(fig4, use_container_width=True)
-
-        col5, col6 = st.columns(2)
-
+        
+        col5,col6 = st.columns(2)
         with col5:
-            st.subheader('Adverse Events by Body System')
-            fig5 = px.scatter(
-                df5,
-                x='USUBJID',  
-                y='AEBODSYS', 
-                color='TRTA',
-                symbol='AEOUT',  
-                labels={'AEBODSYS': 'Body System', 'USUBJID': 'Count', 'TRTA': 'Treatment','AEOUT':'Outcome'},height=1000,width=1000,size_max=10)
-            fig5.update_layout(yaxis=dict(
-        title=None,
-        tickmode='array',
-        tickangle=-45),margin=dict(l=10, r=10, b=100, t=40), font=dict(size=10),legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
-            fig5.update_layout(xaxis_title='Count')
-            st.plotly_chart(fig5,use_container_width=False)
-
-        with col6:
             st.subheader('Severity Causal Relationship')
             fig6 = px.bar(df6, x='AEREL', y='AESEV', color='TRTA',
                           labels={'AEREL': 'Causality', 'AESEV': 'Severity', 'TRTA': 'Treatment'},
-                          height=600, width=800,barmode='group')
+                          height=400, width=900,barmode='group')
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  
-            st.plotly_chart(fig6, use_container_width=True)
+            st.plotly_chart(fig6, use_container_width=True) 
     else:
         st.header(f"Adverse Events Overview for {selected_treatment}")
 
-        col1, col2 = st.columns(2)
 
-        with col1:
-            st.subheader('AE by Subjects')
-            df1_filtered = df1[df1['TRTA'] == selected_treatment]
-            fig1 = px.scatter(df1_filtered, x='ADURN', y='AEBODSYS', color='TRTA',
+        st.subheader('AE by Subjects')
+        df1_filtered = df1[df1['TRTA'] == selected_treatment]
+        fig1 = px.scatter(df1_filtered, x='ADURN', y='AEBODSYS', color='TRTA',
                               labels={'ADURN': 'Duration', 'AEBODSYS': 'Body System', 'TRTA': 'Treatment'},
-                              height=600, width=900)
-            fig1.update_layout(margin=dict(l=200, r=0, b=0, t=40), font=dict(size=8))
-            st.plotly_chart(fig1, use_container_width=True)
+                              height=400, width=900)
+        fig1.update_layout(margin=dict(l=200, r=0, b=0, t=40), font=dict(size=8))
+        st.plotly_chart(fig1, use_container_width=True)
 
-        with col2:
-            st.subheader(f'Occurrences for Treatment Group {selected_treatment}')
-            df2_filtered = df2[df2['TRTA'] == selected_treatment]
-            fig2 = px.scatter(df2_filtered, x='Occurrences', y='AEBODSYS', color='TRTA',
+        st.subheader(f'Occurrences for Treatment Group {selected_treatment}')
+        df2_filtered = df2[df2['TRTA'] == selected_treatment]
+        fig2 = px.scatter(df2_filtered, x='Occurrences', y='AEBODSYS', color='TRTA',
                               labels={'Occurrences': 'Occurrences', 'AEBODSYS': 'Body System', 'TRTA': 'Treatment'},
-                              height=600, width=800)
-            fig2.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
-            st.plotly_chart(fig2, use_container_width=True)
+                              height=400, width=800)
+        fig2.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
+        st.plotly_chart(fig2, use_container_width=True)
+        
+        st.subheader('Adverse Events by Body System')
+        df5_filtered = df5[df5['TRTA'] == selected_treatment]
+        fig5 = px.scatter(
+                df5_filtered,
+                x='USUBJID',  # Use 'Count' for the x-axis
+                y='AEBODSYS',  # Use 'AEBODSYS' for the y-axis
+                color='TRTA',
+                symbol = 'AEOUT',# Different colors for different treatments
+                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases', 'TRTA': 'Treatment','USUBJID':'Subject Count','AEOUT':'Outcome'},  # Labels for axes and legend
+                height=400,
+                width=2000)
+        st.plotly_chart(fig5,use_container_width=True)
 
         col3, col4 = st.columns(2)
 
@@ -415,7 +418,8 @@ with tab3:
             df3_filtered = df3[df3['TRTA'] == selected_treatment]
             fig3 = px.bar(df3_filtered, x='AESHOSP', y='Total_Adverse_Event_Duration', color='TRTA',
                           labels={'AESHOSP': 'Hospitaliztion', 'Total_Adverse_Event_Duration': 'Duration', 'TRTA': 'Treatment'},
-                          height=600, width=800)
+                          height=400, width=800  # Increased size
+                          )
             fig3.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
             st.plotly_chart(fig3, use_container_width=True)
 
@@ -424,34 +428,18 @@ with tab3:
             df4_filtered = df4[df4['TRTA'] == selected_treatment]
             fig4 = px.pie(df4, names='AESEV', values='ADURN', hole=0.35,
                           labels={'AESEV': 'Severity', 'ADURN': 'Duration'},
-                          height=500, width=800)  # Increased width
+                          height=400, width=800)  # Increased width
             fig4.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
             st.plotly_chart(fig4, use_container_width=True)
 
-        col5, col6 = st.columns(2)
 
-        with col5:
-            st.subheader('Adverse Events by Body System')
-            df5_filtered = df5[df5['TRTA'] == selected_treatment]
-            fig5 = px.scatter(
-                df5_filtered,
-                x='USUBJID',  # Use 'Count' for the x-axis
-                y='AEBODSYS',  # Use 'AEBODSYS' for the y-axis
-                color='TRTA',
-                symbol = 'AEOUT',# Different colors for different treatments
-                labels={'AEBODSYS': 'Body System', 'USUBJID': 'Count', 'TRTA': 'Treatment','AEOUT':'Outcome'},  # Labels for axes and legend
-                height=600,
-                width=800)
-            fig5.update_layout(margin=dict(l=0, r=0, b=0, t=40),font=dict(size=12),legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
-            fig5.update_layout(xaxis_title='Count')
-            st.plotly_chart(fig5,use_container_width=True)
-            
-        with col6:
+        col5,col6 = st.columns(2)    
+        with col5:    
             st.subheader('Severity Causal Relationship')
             df6_filtered = df6[df6['TRTA'] == selected_treatment]
-            fig6 = px.bar(df6_filtered, x='AEREL', y='AESEV', color='TRTA',
+            fig6 = px.bar(df6_filtered, y='AESEV', x='AEREL', color='TRTA',
                           labels={'AEREL': 'Causality', 'AESEV': 'Severity', 'TRTA': 'Treatments'},
-                          height=600, width=800,barmode='group')
+                          height=400, width=800,barmode='group' # Increased size
+                          )
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
             st.plotly_chart(fig6, use_container_width=True)
-
