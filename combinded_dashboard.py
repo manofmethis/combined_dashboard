@@ -370,12 +370,13 @@ with tab3:
                 y='AEBODSYS', 
                 color='TRTA',
                 symbol='AEOUT',  
-                labels={'AEBODSYS': 'Body System', 'USUBJID': 'Count', 'TRTA': 'Treatment','AEOUT':'Outcome'}, 
-                height=1000,
-                width=1500)
-            fig5.update_layout(legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
+                labels={'AEBODSYS': 'Body System', 'USUBJID': 'Count', 'TRTA': 'Treatment','AEOUT':'Outcome'},height=1000,width=1000,size_max=10)
+            fig5.update_layout(yaxis=dict(
+        title=None,
+        tickmode='array',
+        tickangle=-45),margin=dict(l=10, r=10, b=100, t=40), font=dict(size=10),legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
             fig5.update_layout(xaxis_title='Count')
-            st.plotly_chart(fig5,use_container_width=True)
+            st.plotly_chart(fig5,use_container_width=False)
 
         with col6:
             st.subheader('Severity Causal Relationship')
