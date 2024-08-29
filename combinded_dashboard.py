@@ -371,9 +371,9 @@ with tab3:
                 color='TRTA',
                 symbol='AEOUT',  
                 labels={'AEBODSYS': 'Body System', 'USUBJID': 'Count', 'TRTA': 'Treatment','AEOUT':'Outcome'}, 
-                height=600,
-                width=800)
-            fig5.update_layout(margin=dict(l=0, r=0, b=0, t=40),font=dict(size=12),legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
+                height=1000,
+                width=1500)
+            fig5.update_layout(legend=dict(orientation="h",yanchor="top",y=-0.2,xanchor="left",x=0.01))
             fig5.update_layout(xaxis_title='Count')
             st.plotly_chart(fig5,use_container_width=True)
 
