@@ -110,11 +110,11 @@ with tab2:
     def pre_post(data,param):
         par=list(param_dict.keys())[list(param_dict.values()).index(param)]
         data=data.groupby(by=['TRTA','AVISIT','PARAMCD'])['AVAL'].mean().reset_index()
-        filtered_data=data
-        fig=px.bar(filtered_data[((filtered_data['AVISIT']=='Baseline') | (filtered_data['AVISIT']=='End of Treatment')) & (filtered_data['PARAMCD']==param)],
-                    x='TRTA',y='AVAL',color='AVISIT',barmode='group',
-                    title=f'Pre-Post Treatment per Treatment Group for Parameter {par}')
-        fig.update_traces(hovertemplate='<b>Treatment Group:</b> %{x}<br>' +'<b>Analysis Visit:</b> %{customdata[0]}<br>' +'<b>{par} Value:</b> %{y:.3g}<br>',customdata=filtered_data[['AVISIT']])
+        filtered_data=data.rename(columns={'TRTA':'Treatment','AVISIT':'Analysis Visit','AVAL':'Mean'})
+        fig=px.bar(filtered_data[((filtered_data['Analysis Visit']=='Baseline') | (filtered_data['Analysis Visit']=='End of Treatment')) & (filtered_data['PARAMCD']==param)],
+                    x='Treatment',y='Mean',color='Analysis Visit',barmode='group',
+                    title=f'Pre-Post Treatment per Treatment Group for Parameter {par}',
+                    hover_data={'Treatment':True,'Analysis Visit':True,'Mean':':.3g'})
         fig.update_layout(yaxis_title=f'{par}',xaxis_title='Treatment')
         return fig
 
@@ -124,13 +124,9 @@ with tab2:
         par=list(param_dict.keys())[list(param_dict.values()).index(param)]
         data=data.groupby(by=['TRTA','VISIT','PARAMCD'])['AVAL'].agg([('AVAL','mean'),('ASTD','std')]).reset_index()
         filtered_data=data
+        filtered_data = filtered_data.rename(columns={'VISIT': 'Visit','AVAL': 'Mean','TRTA': 'Treatment','ASTD': 'Standard Deviation'})
         fig=px.line(filtered_data[filtered_data['PARAMCD']==param],
-                x='VISIT',y='AVAL',color='TRTA',title=f'Mean {par} Value across VISITS')
-        fig.update_traces(hovertemplate=
-    '<b>Visit:</b> %{x}<br>' +
-    '<b>Mean:</b> %{y:.3g}<br>' +  
-    '<b>Standard Deviation:</b> %{customdata[0]:.3g}<br>',  
-    customdata=filtered_data[['ASTD']])
+                x='Visit',y='Mean',color='Treatment',title=f'Mean {par} Value across VISITS',hover_data={'Visit':True,'Mean':':.3g','Treatment':True,'Standard Deviation':':.3g'})
         fig.update_layout(yaxis_title=f'{par}')
         return fig
 
@@ -139,17 +135,13 @@ with tab2:
     def box_treatment(data,param):
         figs={}
         par=list(param_dict.keys())[list(param_dict.values()).index(param)]
+        data=data.rename(columns={'VISIT':'Visit','AVAL':'Value','LBNRIND':'Lab Indicator','USUBJID':'Subject ID'})
         for group in data['TRTA'].unique():
             filtered_data=data[data['TRTA']==group]
             fig=px.box(filtered_data[ (filtered_data['PARAMCD']==param)],
-                    x='VISIT',y='AVAL',
-                    title=f'Distribution of Paramter {par} for Treatment Group {group}')
-            fig.update_traces(hovertemplate=
-            '<b>Visit:</b> %{x}<br>' +
-            '<b>Value:</b> %{y:.3g}<br>' +  
-            '<b>Lab Indicator:</b> %{customdata[0]}<br>' +
-            '<b>Subject ID:</b> %{customdata[1]}<br>',
-            customdata=filtered_data[['LBNRIND', 'USUBJID']])
+                    x='Visit',y='Value',
+                    title=f'Distribution of Paramter {par} for Treatment Group {group}',
+                    hover_data={'Visit':True,'Value':':.3g','Lab Indicator':True,'Subject ID':True})
             fig.update_layout(xaxis_title='VISIT',yaxis_title=f'{par}')
             figs[group]=fig
         return figs
@@ -161,27 +153,17 @@ with tab2:
             data=data.groupby(by=['TRTA','VISIT','PARAMCD'])['ABSVAL'].agg([('ABSVAL','mean'),('ABSSTD','std')]).reset_index()
             data=data[data['VISIT']!='SCREENING 1']
             filtered_data=data[(data['PARAMCD']==param)]
-            fig=px.line(filtered_data,x='VISIT',y='ABSVAL',color='TRTA')
-            fig.update_traces(
-                hovertemplate=
-                    '<b>Visit:</b> %{x}<br>' +
-                    '<b>Mean:</b> %{y:.3g}<br>' +  
-                    '<b>Standard Deviation:</b> %{customdata[0]:.3g}<br>',  
-                customdata=filtered_data[['ABSSTD']])
-            fig.update_layout(title=f'Absolute Change for {par}',xaxis_title='VISIT',yaxis_title='Absolute Change')
+            filtered_data=filtered_data.rename(columns={'TRTA':'Treatment','VISIT':'Visit','ABSVAL':'Mean','ABSSTD':'Standard Deviation'})
+            fig=px.line(filtered_data,x='Visit',y='Mean',color='Treatment',hover_data={'Treatment':True,'Visit':True,'Mean':':.3g','Standard Deviation':':.3g'})
+            fig.update_layout(title=f'Absolute Change for {par}',xaxis_title='Visit',yaxis_title='Absolute Change')
             return fig
         elif abs==3: 
             data=data.groupby(by=['TRTA','VISIT','PARAMCD'])['PCTVAL'].agg([('PCTVAL','mean'),('PCTSTD','std')]).reset_index()
             data=data[data['VISIT']!='SCREENING 1']
             filtered_data=data[(data['PARAMCD']==param)]
-            fig=px.line(filtered_data,x='VISIT',y='PCTVAL',color='TRTA')
-            fig.update_traces(
-                hovertemplate=
-                    '<b>Visit:</b> %{x}<br>' +
-                    '<b>Mean:</b> %{y:.3g}<br>' +  
-                    '<b>Standard Deviation:</b> %{customdata[0]:.3g}<br>',  
-                customdata=filtered_data[['PCTSTD']])
-            fig.update_layout(title=f'Percentage Change for {par}',xaxis_title='VISIT',yaxis_title='Percent Change')  
+            filtered_data=filtered_data.rename(columns={'TRTA':'Treatment','VISIT':'Visit','PCTVAL':'Mean','PCTSTD':'Standard Deviation'})
+            fig=px.line(filtered_data,x='Visit',y='Mean',color='Treatment',hover_data={'Treatment':True,'Visit':True,'Mean':':.3g','Standard Deviation':':.3g'})
+            fig.update_layout(title=f'Percentage Change for {par}',xaxis_title='Visit',yaxis_title='Percent Change')  
             return fig
 
     ## To create Bar graph to view the counts of the dataset per treatment per parameter and classify them according to their Lab Indicator variables
