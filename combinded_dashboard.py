@@ -297,7 +297,7 @@ with tab3:
     df3.rename(columns={'ADURN': 'Total_Adverse_Event_Duration'}, inplace=True)
     df4 = df_adae.groupby(by=['TRTA', 'AESEV'])['ADURN'].sum().reset_index()
     df5 = df_adae.groupby(by = ['TRTA', 'AEBODSYS', 'AEOUT'])['USUBJID'].count().reset_index()
-    df6 = df_adae.groupby(by=['TRTA', 'AEREL'])['AESEV'].count().reset_index()
+    df6 = df_adae.groupby(by=['TRTA', 'AEREL'])['USUBJID'].count().reset_index()
 
     if adae_toggle:
         st.header("Adverse Events Overview for All Treatments")
@@ -354,10 +354,10 @@ with tab3:
         
         col5,col6 = st.columns(2)
         with col5:
-            st.subheader('Severity Causal Relationship')
-            fig6 = px.bar(df6, x='AEREL', y='AESEV', color='TRTA',
-                          labels={'AEREL': 'Causality', 'AESEV': 'Severity', 'TRTA': 'Treatment'},
-                          height=400, width=900,barmode='group')
+            st.subheader('Causality with Treatment')
+            fig6 = px.bar(df6, x='AEREL', y='USUBJID', color='TRTA',
+                          labels={'AEREL': 'Causality', 'USUBJID': 'Subject Count', 'TRTA': 'Treatment'},
+                          height=400, width=900,barmode='group',category_orders={'USUBJID':['NONE','REMOTE','PROBABLE','POSSIBLE']})
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  
             st.plotly_chart(fig6, use_container_width=True) 
     else:
@@ -417,10 +417,10 @@ with tab3:
 
         col5,col6 = st.columns(2)    
         with col5:    
-            st.subheader('Severity Causal Relationship')
+            st.subheader('Causality with Treatment')
             df6_filtered = df6[df6['TRTA'] == selected_treatment]
-            fig6 = px.bar(df6_filtered, y='AESEV', x='AEREL', color='TRTA',
-                          labels={'AEREL': 'Causality', 'AESEV': 'Severity', 'TRTA': 'Treatments'},
+            fig6 = px.bar(df6_filtered, y='USUBJID', x='AEREL', color='TRTA',
+                          labels={'AEREL': 'Causality', 'USUBJID': 'Subject Count', 'TRTA': 'Treatment'},category_orders={'USUBJID':['NONE','REMOTE','PROBABLE','POSSIBLE']},
                           height=400, width=800,barmode='group' # Increased size
                           )
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
