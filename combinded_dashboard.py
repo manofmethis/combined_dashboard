@@ -357,7 +357,7 @@ with tab3:
             st.subheader('Causality with Treatment')
             fig6 = px.bar(df6, x='AEREL', y='USUBJID', color='TRTA',
                           labels={'AEREL': 'Causality', 'USUBJID': 'Subject Count', 'TRTA': 'Treatment'},
-                          height=400, width=900,barmode='group',category_orders={'USUBJID':['NONE','REMOTE','PROBABLE','POSSIBLE']})
+                          height=400, width=900,barmode='group',category_orders={'AEREL':['NONE','REMOTE','PROBABLE','POSSIBLE']})
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  
             st.plotly_chart(fig6, use_container_width=True) 
     else:
@@ -420,7 +420,7 @@ with tab3:
             st.subheader('Causality with Treatment')
             df6_filtered = df6[df6['TRTA'] == selected_treatment]
             fig6 = px.bar(df6_filtered, y='USUBJID', x='AEREL', color='TRTA',
-                          labels={'AEREL': 'Causality', 'USUBJID': 'Subject Count', 'TRTA': 'Treatment'},category_orders={'USUBJID':['NONE','REMOTE','PROBABLE','POSSIBLE']},
+                          labels={'AEREL': 'Causality', 'USUBJID': 'Subject Count', 'TRTA': 'Treatment'},category_orders={'AEREL':['NONE','REMOTE','PROBABLE','POSSIBLE']},
                           height=400, width=800,barmode='group' # Increased size
                           )
             fig6.update_layout(margin=dict(l=0, r=0, b=0, t=40), font=dict(size=12))  # Adjusted layout
