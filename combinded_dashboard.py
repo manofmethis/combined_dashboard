@@ -297,7 +297,8 @@ with tab3:
     df3=df3[df3['AESHOSP']=='Y']
     df3.rename(columns={'USUBJID': 'Subject Count'}, inplace=True)
     df4 = df_adae.groupby(by=['TRTA', 'AESEV'])['USUBJID'].count().reset_index()
-    df5 = df_adae.groupby(by = ['TRTA', 'AEBODSYS', 'AEOUT'])['USUBJID'].count().reset_index()
+    df5 = df_adae.groupby(by=['AEBODSYS', 'AEOUT'])['USUBJID'].count().reset_index()
+    df5_1=df_adae.groupby(by=['TRTA','AEBODSYS','AESEV']).['USUBJID'].count().reset_index()
     df6 = df_adae.groupby(by=['TRTA', 'AEREL'])['USUBJID'].count().reset_index()
 
     if adae_toggle:
@@ -320,7 +321,7 @@ with tab3:
         fig2.update_layout(yaxis={'categoryorder':'total ascending'})
         st.plotly_chart(fig2, use_container_width=True)
         
-        st.subheader('Outcome of Adverse Events by Body System')
+        st.subheader('Distribution of Adverse Event by Outcome')
         fig5 = px.scatter(
                 df5,
                 x='USUBJID',  
@@ -381,8 +382,8 @@ with tab3:
         fig2.update_layout(yaxis={'categoryorder':'total ascending'})
         st.plotly_chart(fig2, use_container_width=True)
         
-        st.subheader('Adverse Events by Body System')
-        df5_filtered = df5[df5['TRTA'] == selected_treatment]
+        st.subheader(f'Distribution of Adverse Event by Outcome in Treatment {selected_treatment}')
+        df5_filtered = df5_1[df5_1['TRTA'] == selected_treatment]
         fig5 = px.scatter(
                 df5_filtered,
                 x='USUBJID',  # Use 'Count' for the x-axis
