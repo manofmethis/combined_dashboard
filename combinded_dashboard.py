@@ -37,7 +37,7 @@ with tab1:
         for group in data['ARM'].unique():
             filtered_data = data[data['ARM'] == group]
             fig = px.box(filtered_data, x='SEX', y=parameter, 
-                        title=f'{par_dict[parameter]} Distribution by Gender in {group} Group')
+                        title=f'{par_dict[parameter]} Distribution by Gender in {group} Group',category_orders={'SEX':['M','F']})
             fig.update_layout(yaxis_title=par_dict[parameter])
             figs[group] = fig
         return figs
