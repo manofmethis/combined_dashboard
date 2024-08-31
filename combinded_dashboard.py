@@ -23,7 +23,7 @@ with tab1:
         for group in data['ARM'].unique():
             filtered_data = data[data['ARM'] == group]
             fig = px.pie(filtered_data, names=variable, hole=0.5, 
-                        title=f'Disposition Summary in {group} Group') 
+                        title=f'Summary in {group} Group') 
             fig.update_traces( hovertemplate=
     '<b>%{label}:</b><br>' +
     'Count: %{value:.3g}<br>' +  
