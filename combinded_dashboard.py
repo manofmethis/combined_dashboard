@@ -327,7 +327,7 @@ with tab3:
                 x='USUBJID',  
                 y='AEBODSYS',
                 color='AEOUT',  
-                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases','USUBJID':'Subject Count','AEOUT':'Outcome'},category_order={'AEOUT':['NOT RECOVERED/NOT RESOLVED','RECOVERED/RESOLVED','FATAL']},
+                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases','USUBJID':'Subject Count','AEOUT':'Outcome'},category_orders={'AEOUT':['NOT RECOVERED/NOT RESOLVED','RECOVERED/RESOLVED','FATAL']},
                 height=600,
                 width=1500)
         fig5.update_layout(margin=dict(l=0, r=0, b=0, t=40),font=dict(size=12))
@@ -389,7 +389,7 @@ with tab3:
                 x='USUBJID',  # Use 'Count' for the x-axis
                 y='AEBODSYS',  # Use 'AEBODSYS' for the y-axis
                 color = 'AEOUT',# Different colors for different treatments
-                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases','USUBJID':'Subject Count','AEOUT':'Outcome'},category_order={'AEOUT':['NOT RECOVERED/NOT RESOLVED','RECOVERED/RESOLVED','FATAL']} , # Labels for axes and legend
+                labels={'AEBODSYS': 'Body System', 'Count': 'Number of Cases','USUBJID':'Subject Count','AEOUT':'Outcome'},category_orders={'AEOUT':['NOT RECOVERED/NOT RESOLVED','RECOVERED/RESOLVED','FATAL']} , # Labels for axes and legend
                 height=600,
                 width=1500)
         fig5.update_layout(yaxis={'categoryorder':'total ascending'})
