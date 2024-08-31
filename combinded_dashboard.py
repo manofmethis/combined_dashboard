@@ -298,7 +298,7 @@ with tab3:
     df3.rename(columns={'USUBJID': 'Subject Count'}, inplace=True)
     df4 = df_adae.groupby(by=['TRTA', 'AESEV'])['USUBJID'].count().reset_index()
     df5 = df_adae.groupby(by=['AEBODSYS', 'AEOUT'])['USUBJID'].count().reset_index()
-    df5_1=df_adae.groupby(by=['TRTA','AEBODSYS','AESEV'])['USUBJID'].count().reset_index()
+    df5_1=df_adae.groupby(by=['TRTA','AEBODSYS','AEOUT'])['USUBJID'].count().reset_index()
     df6 = df_adae.groupby(by=['TRTA', 'AEREL'])['USUBJID'].count().reset_index()
 
     if adae_toggle:
